@@ -13,6 +13,13 @@
     <description>A zero-code time-warping test library for Java.</description>
     <url>https://github.com/jlapugot/chronoguard</url>
 
+    <modules>
+        <module>chronoguard-core</module>
+        <module>chronoguard-agent</module>
+        <module>chronoguard-junit5</module>
+        <module>chronoguard-examples</module>
+    </modules>
+
     <licenses>
         <license>
             <name>The Apache License, Version 2.0</name>
