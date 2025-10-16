@@ -49,9 +49,21 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-          server-id: central
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+
+      - name: Create Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml << EOF
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${{ secrets.CENTRAL_USERNAME }}</username>
+                <password>${{ secrets.CENTRAL_TOKEN }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
@@ -61,6 +73,3 @@ jobs:
 
       - name: Deploy to Maven Central
         run: mvn -B deploy -P release
-        env:
-          MAVEN_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN }}
