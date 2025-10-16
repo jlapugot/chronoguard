@@ -36,6 +36,20 @@
     </scm>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <argLine>
+                            -javaagent:${settings.localRepository}/io/github/jlapugot/chronoguard/chronoguard-agent/${project.version}/chronoguard-agent-${project.version}.jar
+                        </argLine>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.central</groupId>
