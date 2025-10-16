@@ -50,8 +50,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           server-id: central
-          server-username: ${{ secrets.CENTRAL_USERNAME }}
-          server-password: ${{ secrets.CENTRAL_TOKEN }}
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
