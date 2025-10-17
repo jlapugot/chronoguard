@@ -39,7 +39,7 @@ public class TimeController {
     
     public static long getCurrentTimeMillis() {
         if (frozenTimeMillis != null) {
-            return frozenTimeMillis;
+            return frozenTimeMillis + offsetMillis;
         }
         return System.currentTimeMillis() + offsetMillis;
     }
