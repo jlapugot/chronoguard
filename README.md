@@ -50,13 +50,13 @@ Add the dependencies to your `pom.xml`:
     <dependency>
         <groupId>io.github.jlapugot.chronoguard</groupId>
         <artifactId>chronoguard-junit5</artifactId>
-        <version>1.1.0</version> <!-- Replace with the latest version -->
+        <version>1.1.1</version> <!-- Replace with the latest version -->
         <scope>test</scope>
     </dependency>
     <dependency>
         <groupId>io.github.jlapugot.chronoguard</groupId>
         <artifactId>chronoguard-agent</artifactId>
-        <version>1.1.0</version> <!-- Replace with the latest version -->
+        <version>1.1.1</version> <!-- Replace with the latest version -->
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -67,7 +67,7 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
 **For Java 11:**
 ```xml
 <properties>
-    <chronoguard.version>1.1.0</chronoguard.version>
+    <chronoguard.version>1.1.1</chronoguard.version>
 </properties>
 
 <build>
@@ -89,7 +89,7 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
 **For Java 17+:**
 ```xml
 <properties>
-    <chronoguard.version>1.1.0</chronoguard.version>
+    <chronoguard.version>1.1.1</chronoguard.version>
 </properties>
 
 <build>
@@ -119,14 +119,14 @@ Add the dependencies to your `build.gradle` or `build.gradle.kts`:
 
 **Groovy DSL:**
 ```groovy
-testImplementation 'io.github.jlapugot.chronoguard:chronoguard-junit5:1.1.0' // Replace with the latest version
-testImplementation 'io.github.jlapugot.chronoguard:chronoguard-agent:1.1.0' // Replace with the latest version
+testImplementation 'io.github.jlapugot.chronoguard:chronoguard-junit5:1.1.1' // Replace with the latest version
+testImplementation 'io.github.jlapugot.chronoguard:chronoguard-agent:1.1.1' // Replace with the latest version
 ```
 
 **Kotlin DSL:**
 ```kotlin
-testImplementation("io.github.jlapugot.chronoguard:chronoguard-junit5:1.1.0") // Replace with the latest version
-testImplementation("io.github.jlapugot.chronoguard:chronoguard-agent:1.1.0") // Replace with the latest version
+testImplementation("io.github.jlapugot.chronoguard:chronoguard-junit5:1.1.1") // Replace with the latest version
+testImplementation("io.github.jlapugot.chronoguard:chronoguard-agent:1.1.1") // Replace with the latest version
 ```
 
 Then, configure the `test` task to attach the Java Agent:
