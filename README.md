@@ -66,6 +66,10 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
 
 **For Java 11:**
 ```xml
+<properties>
+    <chronoguard.version>1.1.0</chronoguard.version>
+</properties>
+
 <build>
     <plugins>
         <plugin>
@@ -74,7 +78,7 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
             <version>3.0.0</version>
             <configuration>
                 <argLine>
-                    -javaagent:${settings.localRepository}/io/github/jlapugot/chronoguard/chronoguard-agent/${project.version}/chronoguard-agent-${project.version}.jar
+                    -javaagent:${settings.localRepository}/io/github/jlapugot/chronoguard/chronoguard-agent/${chronoguard.version}/chronoguard-agent-${chronoguard.version}.jar
                 </argLine>
             </configuration>
         </plugin>
@@ -84,6 +88,10 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
 
 **For Java 17+:**
 ```xml
+<properties>
+    <chronoguard.version>1.1.0</chronoguard.version>
+</properties>
+
 <build>
     <plugins>
         <plugin>
@@ -92,7 +100,7 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
             <version>3.0.0</version>
             <configuration>
                 <argLine>
-                    -javaagent:${settings.localRepository}/io/github/jlapugot/chronoguard/chronoguard-agent/${project.version}/chronoguard-agent-${project.version}.jar
+                    -javaagent:${settings.localRepository}/io/github/jlapugot/chronoguard/chronoguard-agent/${chronoguard.version}/chronoguard-agent-${chronoguard.version}.jar
                     --add-opens=java.base/java.lang=ALL-UNNAMED
                     --add-opens=java.base/java.time=ALL-UNNAMED
                     --add-opens=java.base/java.util=ALL-UNNAMED
