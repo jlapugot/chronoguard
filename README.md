@@ -26,13 +26,13 @@ Add the dependencies to your `pom.xml`:
     <dependency>
         <groupId>io.github.jlapugot.chronoguard</groupId>
         <artifactId>chronoguard-junit5</artifactId>
-        <version>1.0.1</version> <!-- Replace with the latest version -->
+        <version>1.1.0</version> <!-- Replace with the latest version -->
         <scope>test</scope>
     </dependency>
     <dependency>
         <groupId>io.github.jlapugot.chronoguard</groupId>
         <artifactId>chronoguard-agent</artifactId>
-        <version>1.0.1</version> <!-- Replace with the latest version -->
+        <version>1.1.0</version> <!-- Replace with the latest version -->
         <scope>test</scope>
     </dependency>
 </dependencies>
