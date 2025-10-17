@@ -1,7 +1,7 @@
 # ChronoGuard
 
 [![CI/CD](https://github.com/jlapugot/chronoguard/actions/workflows/maven-ci-cd.yml/badge.svg)](https://github.com/jlapugot/chronoguard/actions/workflows/maven-ci-cd.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.jlapugot.chronoguard/chronoguard.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.jlapugot.chronoguard%22)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.jlapugot.chronoguard/chronoguard.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.jlapugot.chronoguard/chronoguard)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ChronoGuard is a powerful, zero-code time-warping test library for Java and JUnit 5. It lets you control time in your unit and integration tests, allowing you to freeze the clock, travel forwards or backwards, and test time-dependent logic like token expiration or cache TTLs with simple annotations and a clean API. No application code changes required.
