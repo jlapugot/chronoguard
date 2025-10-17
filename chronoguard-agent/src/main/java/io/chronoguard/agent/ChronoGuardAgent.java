@@ -1,61 +1,118 @@
 package io.chronoguard.agent;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
-import net.bytebuddy.asm.Advice;
+import net.bytebuddy.asm.AsmVisitorWrapper;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.field.FieldList;
+import net.bytebuddy.description.method.MethodList;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.jar.asm.ClassVisitor;
+import net.bytebuddy.jar.asm.MethodVisitor;
+import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.pool.TypePool;
 
 import java.lang.instrument.Instrumentation;
 
 public class ChronoGuardAgent {
-    
+
     public static void premain(String args, Instrumentation inst) {
         install(inst);
     }
-    
+
     public static void agentmain(String args, Instrumentation inst) {
         install(inst);
     }
-    
+
     private static void install(Instrumentation inst) {
         new AgentBuilder.Default()
+            .ignore(ElementMatchers.nameStartsWith("java."))
+            .ignore(ElementMatchers.nameStartsWith("javax."))
+            .ignore(ElementMatchers.nameStartsWith("sun."))
+            .ignore(ElementMatchers.nameStartsWith("com.sun."))
+            .ignore(ElementMatchers.nameStartsWith("jdk."))
             .ignore(ElementMatchers.nameStartsWith("io.chronoguard"))
             .ignore(ElementMatchers.nameStartsWith("net.bytebuddy"))
-            .type(ElementMatchers.named("java.lang.System"))
+            .ignore(ElementMatchers.nameStartsWith("org.junit"))
+            .ignore(ElementMatchers.nameStartsWith("org.mockito"))
+            .type(ElementMatchers.any())
             .transform((builder, typeDescription, classLoader, module, protectionDomain) ->
-                builder.method(ElementMatchers.named("currentTimeMillis"))
-                    .intercept(Advice.to(SystemCurrentTimeMillisAdvice.class))
-            )
-            .type(ElementMatchers.named("java.time.Clock"))
-            .transform((builder, typeDescription, classLoader, module, protectionDomain) ->
-                builder.method(ElementMatchers.named("millis"))
-                    .intercept(Advice.to(ClockMillisAdvice.class))
-            )
-            .type(ElementMatchers.named("java.time.Instant"))
-            .transform((builder, typeDescription, classLoader, module, protectionDomain) ->
-                builder.method(ElementMatchers.named("now").and(ElementMatchers.takesArguments(0)))
-                    .intercept(Advice.to(InstantNowAdvice.class))
+                builder.visit(new TimeCallReplacer())
             )
             .installOn(inst);
     }
-    
-    public static class SystemCurrentTimeMillisAdvice {
-        @Advice.OnMethodExit
-        static void exit( @Advice.Return(readOnly = false) long returned) {
-            returned = io.chronoguard.TimeController.getCurrentTimeMillis();
+
+    static class TimeCallReplacer implements AsmVisitorWrapper {
+        @Override
+        public int mergeWriter(int flags) {
+            return flags;
         }
-    }
-    
-    public static class ClockMillisAdvice {
-        @Advice.OnMethodExit
-        static void exit( @Advice.Return(readOnly = false) long returned) {
-            returned = io.chronoguard.TimeController.getCurrentTimeMillis();
+
+        @Override
+        public int mergeReader(int flags) {
+            return flags;
         }
-    }
-    
-    public static class InstantNowAdvice {
-        @Advice.OnMethodExit
-        static void exit( @Advice.Return(readOnly = false) java.time.Instant returned) {
-            returned = io.chronoguard.TimeController.getCurrentInstant();
+
+        @Override
+        public ClassVisitor wrap(TypeDescription instrumentedType, ClassVisitor classVisitor, Implementation.Context implementationContext, TypePool typePool, FieldList<FieldDescription.InDefinedShape> fields, MethodList<?> methods, int writerFlags, int readerFlags) {
+            return new ClassVisitor(Opcodes.ASM9, classVisitor) {
+                @Override
+                public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+                    MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
+                    return new MethodVisitor(Opcodes.ASM9, mv) {
+                        @Override
+                        public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+                            // Replace System.currentTimeMillis()
+                            if (opcode == Opcodes.INVOKESTATIC &&
+                                owner.equals("java/lang/System") &&
+                                name.equals("currentTimeMillis") &&
+                                descriptor.equals("()J")) {
+                                super.visitMethodInsn(Opcodes.INVOKESTATIC,
+                                    "io/chronoguard/TimeController",
+                                    "getCurrentTimeMillis",
+                                    "()J",
+                                    false);
+                            }
+                            // Replace Instant.now()
+                            else if (opcode == Opcodes.INVOKESTATIC &&
+                                owner.equals("java/time/Instant") &&
+                                name.equals("now") &&
+                                descriptor.equals("()Ljava/time/Instant;")) {
+                                super.visitMethodInsn(Opcodes.INVOKESTATIC,
+                                    "io/chronoguard/TimeController",
+                                    "getCurrentInstant",
+                                    "()Ljava/time/Instant;",
+                                    false);
+                            }
+                            // Replace LocalDateTime.now()
+                            else if (opcode == Opcodes.INVOKESTATIC &&
+                                owner.equals("java/time/LocalDateTime") &&
+                                name.equals("now") &&
+                                descriptor.equals("()Ljava/time/LocalDateTime;")) {
+                                super.visitMethodInsn(Opcodes.INVOKESTATIC,
+                                    "io/chronoguard/TimeController",
+                                    "getCurrentInstant",
+                                    "()Ljava/time/Instant;",
+                                    false);
+                                super.visitMethodInsn(Opcodes.INVOKESTATIC,
+                                    "java/time/ZoneId",
+                                    "systemDefault",
+                                    "()Ljava/time/ZoneId;",
+                                    false);
+                                super.visitMethodInsn(Opcodes.INVOKESTATIC,
+                                    "java/time/LocalDateTime",
+                                    "ofInstant",
+                                    "(Ljava/time/Instant;Ljava/time/ZoneId;)Ljava/time/LocalDateTime;",
+                                    false);
+                            }
+                            else {
+                                super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+                            }
+                        }
+                    };
+                }
+            };
         }
     }
 }
