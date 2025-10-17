@@ -13,6 +13,11 @@
     <artifactId>chronoguard-examples</artifactId>
     <name>ChronoGuard :: Examples</name>
 
+    <properties>
+        <!-- Skip deployment to Maven Central - examples are for demonstration only -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
     <dependencies>
         <!-- ChronoGuard Modules -->
         <dependency>
