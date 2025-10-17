@@ -32,11 +32,11 @@ public class ChronoGuardAgent {
             .ignore(ElementMatchers.nameStartsWith("sun."))
             .ignore(ElementMatchers.nameStartsWith("com.sun."))
             .ignore(ElementMatchers.nameStartsWith("jdk."))
-            .ignore(ElementMatchers.nameStartsWith("io.chronoguard"))
+            .ignore(ElementMatchers.nameStartsWith("io.chronoguard."))
             .ignore(ElementMatchers.nameStartsWith("net.bytebuddy"))
             .ignore(ElementMatchers.nameStartsWith("org.junit"))
             .ignore(ElementMatchers.nameStartsWith("org.mockito"))
-            .type(ElementMatchers.any())
+            .type(ElementMatchers.not(ElementMatchers.nameStartsWith("io.chronoguard.")))
             .transform((builder, typeDescription, classLoader, module, protectionDomain) ->
                 builder.visit(new TimeCallReplacer())
             )
