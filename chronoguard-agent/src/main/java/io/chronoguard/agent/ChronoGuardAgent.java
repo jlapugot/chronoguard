@@ -27,15 +27,26 @@ public class ChronoGuardAgent {
 
     private static void install(Instrumentation inst) {
         new AgentBuilder.Default()
-            .ignore(ElementMatchers.nameStartsWith("java."))
-            .ignore(ElementMatchers.nameStartsWith("javax."))
-            .ignore(ElementMatchers.nameStartsWith("sun."))
-            .ignore(ElementMatchers.nameStartsWith("com.sun."))
-            .ignore(ElementMatchers.nameStartsWith("jdk."))
-            .ignore(ElementMatchers.nameStartsWith("io.chronoguard."))
-            .ignore(ElementMatchers.nameStartsWith("net.bytebuddy"))
-            .ignore(ElementMatchers.nameStartsWith("org.junit"))
-            .ignore(ElementMatchers.nameStartsWith("org.mockito"))
+            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
+            .ignore(new net.bytebuddy.matcher.ElementMatcher.Junction.AbstractBase<net.bytebuddy.description.type.TypeDescription>() {
+                @Override
+                public boolean matches(net.bytebuddy.description.type.TypeDescription target) {
+                    String name = target.getName();
+                    return name.startsWith("java.") ||
+                           name.startsWith("javax.") ||
+                           name.startsWith("sun.") ||
+                           name.startsWith("com.sun.") ||
+                           name.startsWith("jdk.") ||
+                           name.startsWith("io.chronoguard.") ||
+                           name.startsWith("net.bytebuddy") ||
+                           name.startsWith("org.junit") ||
+                           name.startsWith("org.mockito") ||
+                           name.contains("$$Lambda") ||
+                           name.contains("GeneratedSerializationConstructorAccessor") ||
+                           name.contains("GeneratedMethodAccessor") ||
+                           name.contains("GeneratedConstructorAccessor");
+                }
+            })
             .type(ElementMatchers.not(ElementMatchers.nameStartsWith("io.chronoguard.")))
             .transform((builder, typeDescription, classLoader, module, protectionDomain) ->
                 builder.visit(new TimeCallReplacer())
