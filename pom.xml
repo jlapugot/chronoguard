@@ -17,7 +17,6 @@
         <module>chronoguard-core</module>
         <module>chronoguard-agent</module>
         <module>chronoguard-junit5</module>
-        <module>chronoguard-examples</module>
     </modules>
 
     <properties>
@@ -153,6 +152,12 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>with-examples</id>
+            <modules>
+                <module>chronoguard-examples</module>
+            </modules>
+        </profile>
         <profile>
             <id>release</id>
             <build>
