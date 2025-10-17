@@ -19,15 +19,23 @@ ChronoGuard is a powerful, zero-code time-warping test library for Java and JUni
 
 ### Maven
 
-Add the `chronoguard-junit5` dependency to your `pom.xml`:
+Add the dependencies to your `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>io.github.jlapugot.chronoguard</groupId>
-    <artifactId>chronoguard-junit5</artifactId>
-    <version>1.0.0</version> <!-- Replace with the latest version -->
-    <scope>test</scope>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>io.github.jlapugot.chronoguard</groupId>
+        <artifactId>chronoguard-junit5</artifactId>
+        <version>1.0.1</version> <!-- Replace with the latest version -->
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.github.jlapugot.chronoguard</groupId>
+        <artifactId>chronoguard-agent</artifactId>
+        <version>1.0.1</version> <!-- Replace with the latest version -->
+        <scope>test</scope>
+    </dependency>
+</dependencies>
 ```
 
 Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is required for time manipulation:
@@ -51,16 +59,18 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
 
 ### Gradle
 
-Add the `chronoguard-junit5` dependency to your `build.gradle` or `build.gradle.kts`:
+Add the dependencies to your `build.gradle` or `build.gradle.kts`:
 
 **Groovy DSL:**
 ```groovy
-testImplementation 'io.github.jlapugot.chronoguard:chronoguard-junit5:1.0.0' // Replace with the latest version
+testImplementation 'io.github.jlapugot.chronoguard:chronoguard-junit5:1.0.1' // Replace with the latest version
+testImplementation 'io.github.jlapugot.chronoguard:chronoguard-agent:1.0.1' // Replace with the latest version
 ```
 
 **Kotlin DSL:**
 ```kotlin
-testImplementation("io.github.jlapugot.chronoguard:chronoguard-junit5:1.0.0") // Replace with the latest version
+testImplementation("io.github.jlapugot.chronoguard:chronoguard-junit5:1.0.1") // Replace with the latest version
+testImplementation("io.github.jlapugot.chronoguard:chronoguard-agent:1.0.1") // Replace with the latest version
 ```
 
 Then, configure the `test` task to attach the Java Agent:
