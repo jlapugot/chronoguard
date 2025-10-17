@@ -64,6 +64,7 @@ Add the dependencies to your `pom.xml`:
 
 Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is required for time manipulation:
 
+**For Java 11:**
 ```xml
 <build>
     <plugins>
@@ -80,6 +81,29 @@ Then, configure the `maven-surefire-plugin` to attach the Java Agent, which is r
     </plugins>
 </build>
 ```
+
+**For Java 17+:**
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0</version>
+            <configuration>
+                <argLine>
+                    -javaagent:${settings.localRepository}/io/github/jlapugot/chronoguard/chronoguard-agent/${project.version}/chronoguard-agent-${project.version}.jar
+                    --add-opens=java.base/java.lang=ALL-UNNAMED
+                    --add-opens=java.base/java.time=ALL-UNNAMED
+                    --add-opens=java.base/java.util=ALL-UNNAMED
+                </argLine>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+> **Note for Java 17+:** The `--add-opens` flags are required due to the Java Platform Module System (JPMS) strong encapsulation. These flags allow the ChronoGuard agent to access internal JDK packages needed for bytecode transformation.
 
 ### Gradle
 
@@ -99,9 +123,22 @@ testImplementation("io.github.jlapugot.chronoguard:chronoguard-agent:1.1.0") // 
 
 Then, configure the `test` task to attach the Java Agent:
 
+**For Java 11:**
 ```groovy
 test {
     jvmArgs "-javaagent:${configurations.testRuntimeClasspath.find { it.name.contains('chronoguard-agent') }}"
+}
+```
+
+**For Java 17+:**
+```groovy
+test {
+    jvmArgs(
+        "-javaagent:${configurations.testRuntimeClasspath.find { it.name.contains('chronoguard-agent') }}",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.time=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED"
+    )
 }
 ```
 
