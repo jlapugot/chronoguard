@@ -6,6 +6,30 @@
 
 ChronoGuard is a powerful, zero-code time-warping test library for Java and JUnit 5. It lets you control time in your unit and integration tests, allowing you to freeze the clock, travel forwards or backwards, and test time-dependent logic like token expiration or cache TTLs with simple annotations and a clean API. No application code changes required.
 
+## Why ChronoGuard?
+
+ChronoGuard is designed specifically for **modern JUnit 5 testing** with a focus on developer experience:
+
+- **🎯 Annotation-Based**: Use `@TimeWarp` to declaratively set time for tests - no boilerplate setup/teardown code
+- **☕ Java Time API First**: Built around `java.time` (Instant, LocalDateTime) for modern Java applications
+- **🧪 JUnit 5 Native**: Automatic cleanup via extension lifecycle - tests are always properly isolated
+- **✨ Developer Friendly**: Intuitive API designed for the common case: "I want to test this at a specific time"
+- **📦 Zero Code Changes**: Bytecode transformation means no changes to your application code required
+
+### Comparison with Alternatives
+
+While libraries like [TOPdesk's time-transformer-agent](https://github.com/TOPdesk/time-transformer-agent) provide low-level time control, ChronoGuard offers a more streamlined experience for JUnit 5 users:
+
+| Feature | ChronoGuard | time-transformer-agent |
+|---------|-------------|------------------------|
+| JUnit 5 Annotations | ✅ `@TimeWarp` | ❌ Manual API calls |
+| Automatic Cleanup | ✅ Extension lifecycle | ❌ Manual reset needed |
+| Java Time API | ✅ Primary focus | ⚠️ Basic support |
+| Declarative Testing | ✅ Annotation-based | ❌ Imperative only |
+| Modern API | ✅ `TimeController.freeze(instant)` | ⚠️ `TimeTransformer.setTime(...)` |
+
+**Choose ChronoGuard if you want a modern, annotation-driven testing experience with JUnit 5.**
+
 ## Features
 
 - **Time Travel**: Move time forward or backward with simple `Duration` objects.
@@ -63,14 +87,14 @@ Add the dependencies to your `build.gradle` or `build.gradle.kts`:
 
 **Groovy DSL:**
 ```groovy
-testImplementation 'io.github.jlapugot.chronoguard:chronoguard-junit5:1.0.1' // Replace with the latest version
-testImplementation 'io.github.jlapugot.chronoguard:chronoguard-agent:1.0.1' // Replace with the latest version
+testImplementation 'io.github.jlapugot.chronoguard:chronoguard-junit5:1.1.0' // Replace with the latest version
+testImplementation 'io.github.jlapugot.chronoguard:chronoguard-agent:1.1.0' // Replace with the latest version
 ```
 
 **Kotlin DSL:**
 ```kotlin
-testImplementation("io.github.jlapugot.chronoguard:chronoguard-junit5:1.0.1") // Replace with the latest version
-testImplementation("io.github.jlapugot.chronoguard:chronoguard-agent:1.0.1") // Replace with the latest version
+testImplementation("io.github.jlapugot.chronoguard:chronoguard-junit5:1.1.0") // Replace with the latest version
+testImplementation("io.github.jlapugot.chronoguard:chronoguard-agent:1.1.0") // Replace with the latest version
 ```
 
 Then, configure the `test` task to attach the Java Agent:
